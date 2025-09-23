@@ -1,0 +1,210 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import { MapPin, Phone, Mail, Clock, Users, Star, Plus, Search, Filter, MoreVertical, Edit, Trash2 } from "lucide-react"
+import { motion } from "framer-motion"
+
+export default function CentersPage() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const centers = [
+    {
+      id: 1,
+      name: "Ayurvedic Wellness Center",
+      location: "Mumbai, Maharashtra",
+      address: "123 Wellness Street, Andheri West, Mumbai - 400058",
+      phone: "+91 98765 43210",
+      email: "info@ayurvedawellness.com",
+      rating: 4.8,
+      totalPatients: 1250,
+      activeTherapists: 8,
+      operatingHours: "9:00 AM - 8:00 PM",
+      status: "Active",
+      specialties: ["Panchakarma", "Abhyanga", "Shirodhara"],
+    },
+    {
+      id: 2,
+      name: "Holistic Healing Hub",
+      location: "Bangalore, Karnataka",
+      address: "456 Healing Avenue, Koramangala, Bangalore - 560034",
+      phone: "+91 87654 32109",
+      email: "contact@holistichub.com",
+      rating: 4.6,
+      totalPatients: 890,
+      activeTherapists: 6,
+      operatingHours: "8:00 AM - 7:00 PM",
+      status: "Active",
+      specialties: ["Virechana", "Basti", "Nasya"],
+    },
+    {
+      id: 3,
+      name: "Traditional Ayurveda Clinic",
+      location: "Kerala, India",
+      address: "789 Heritage Road, Kochi, Kerala - 682001",
+      phone: "+91 76543 21098",
+      email: "info@traditionalayurveda.com",
+      rating: 4.9,
+      totalPatients: 2100,
+      activeTherapists: 12,
+      operatingHours: "7:00 AM - 9:00 PM",
+      status: "Active",
+      specialties: ["Panchakarma", "Kizhi", "Pizhichil"],
+    },
+  ]
+
+  const handleAddCenter = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+      // Simulate adding center
+    }, 2000)
+  }
+
+  const filteredCenters = centers.filter(
+    (center) =>
+      center.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      center.location.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Treatment Centers</h1>
+          <p className="text-muted-foreground">Manage your Panchakarma treatment centers</p>
+        </div>
+        <Button
+          onClick={handleAddCenter}
+          disabled={isLoading}
+          className="bg-herbal-gradient hover:opacity-90 text-white"
+        >
+          {isLoading ? (
+            <>
+              <LoadingSpinner size="sm" className="mr-2" />
+              Adding...
+            </>
+          ) : (
+            <>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Center
+            </>
+          )}
+        </Button>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search centers by name or location..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Button variant="outline">
+          <Filter className="mr-2 h-4 w-4" />
+          Filters
+        </Button>
+      </div>
+
+      {/* Centers Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {filteredCenters.map((center, index) => (
+          <motion.div
+            key={center.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <Card className="h-full hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-4">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">{center.name}</CardTitle>
+                    <CardDescription className="flex items-center gap-1 mt-1">
+                      <MapPin className="h-3 w-3" />
+                      {center.location}
+                    </CardDescription>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={center.status === "Active" ? "default" : "secondary"}>{center.status}</Badge>
+                    <Button variant="ghost" size="sm">
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">{center.address}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">{center.phone}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">{center.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">{center.operatingHours}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                    <span className="font-medium">{center.rating}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                    <span>{center.totalPatients} patients</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Specialties:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {center.specialties.map((specialty) => (
+                      <Badge key={specialty} variant="outline" className="text-xs">
+                        {specialty}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <Button variant="outline" size="sm" className="flex-1 bg-transparent">
+                    <Edit className="mr-2 h-3 w-3" />
+                    Edit
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700 bg-transparent">
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {filteredCenters.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">No centers found matching your search.</p>
+        </div>
+      )}
+    </div>
+  )
+}
