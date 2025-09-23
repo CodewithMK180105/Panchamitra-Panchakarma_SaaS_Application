@@ -72,7 +72,7 @@ export function AppHeader() {
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <SidebarTrigger className="-ml-1" />
-      <div className="flex flex-1 items-center gap-2 px-3">
+      <div className="flex flex-1 justify-between items-center gap-2 px-3">
         <form onSubmit={handleSearch} className="relative flex-1 max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -85,25 +85,25 @@ export function AppHeader() {
           />
         </form>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleQuickActions} disabled={loading}>
+          <Button className="cursor-pointer" variant="outline" size="sm" onClick={handleQuickActions} disabled={loading}>
             {loading ? <LoadingSpinner className="h-3 w-3 mr-2" /> : <Zap className="h-3 w-3 mr-2" />}
             Quick Actions
           </Button>
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative cursor-pointer">
             <Palette className="h-4 w-4" />
             <span className="sr-only">Theme picker</span>
           </Button>
           <ThemeToggle />
-          <Button variant="ghost" size="icon" className="relative" onClick={handleNotifications} disabled={loading}>
+          <Button variant="ghost" size="icon" className="relative cursor-pointer" onClick={handleNotifications} disabled={loading}>
             {loading ? <LoadingSpinner className="h-3 w-3" /> : <Bell className="h-4 w-4" />}
             <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs bg-herbal-green">3</Badge>
             <span className="sr-only">Notifications</span>
           </Button>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <DropdownMenuTrigger>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full cursor-pointer">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@practitioner" />
+                  {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@practitioner" /> */}
                   <AvatarFallback>DR</AvatarFallback>
                 </Avatar>
               </Button>
@@ -116,15 +116,15 @@ export function AppHeader() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleProfileAction("profile")} disabled={loading}>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => handleProfileAction("profile")} disabled={loading}>
                 {loading ? <LoadingSpinner className="h-3 w-3 mr-2" /> : null}
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleProfileAction("settings")} disabled={loading}>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => handleProfileAction("settings")} disabled={loading}>
                 {loading ? <LoadingSpinner className="h-3 w-3 mr-2" /> : null}
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleProfileAction("support")} disabled={loading}>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => handleProfileAction("support")} disabled={loading}>
                 {loading ? <LoadingSpinner className="h-3 w-3 mr-2" /> : null}
                 Support
               </DropdownMenuItem>
@@ -132,7 +132,7 @@ export function AppHeader() {
               <DropdownMenuItem
                 onClick={() => handleProfileAction("logout")}
                 disabled={loading}
-                className="text-red-600"
+                className="text-red-600 cursor-pointer"
               >
                 {loading ? <LoadingSpinner className="h-3 w-3 mr-2" /> : null}
                 Log out

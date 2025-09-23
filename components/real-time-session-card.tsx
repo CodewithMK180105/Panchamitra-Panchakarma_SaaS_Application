@@ -197,15 +197,15 @@ export function RealTimeSessionCard() {
                   </div>
                 </div>
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="p-2">
+                  <DropdownMenuTrigger className="cursor-pointer">
+                    <Button variant="ghost" size="sm" className="p-2 cursor-pointer">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>View Details</DropdownMenuItem>
-                    <DropdownMenuItem>Update Status</DropdownMenuItem>
-                    <DropdownMenuItem>Add Notes</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">View Details</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">Update Status</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">Add Notes</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
