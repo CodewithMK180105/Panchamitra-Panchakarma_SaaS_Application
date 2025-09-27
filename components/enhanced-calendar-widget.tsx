@@ -24,18 +24,18 @@ interface DayData {
   date: number
   sessions: number
   capacity: number
-  status: "low" | "medium" | "high" | "full"
+  status: "low" | "med" | "high" | "full"
   isToday?: boolean
 }
 
 const mockWeekData: DayData[] = [
   { date: 15, sessions: 8, capacity: 10, status: "high", isToday: true },
-  { date: 16, sessions: 6, capacity: 10, status: "medium" },
+  { date: 16, sessions: 6, capacity: 10, status: "med" },
   { date: 17, sessions: 9, capacity: 10, status: "high" },
   { date: 18, sessions: 4, capacity: 10, status: "low" },
-  { date: 19, sessions: 7, capacity: 10, status: "medium" },
+  { date: 19, sessions: 7, capacity: 10, status: "med" },
   { date: 20, sessions: 10, capacity: 10, status: "full" },
-  { date: 21, sessions: 5, capacity: 10, status: "medium" },
+  { date: 21, sessions: 5, capacity: 10, status: "med" },
 ]
 
 const upcomingSessions = [
@@ -73,7 +73,7 @@ export function EnhancedCalendarWidget() {
     switch (status) {
       case "low":
         return "bg-green-100 text-green-800 border-green-200"
-      case "medium":
+      case "med":
         return "bg-yellow-100 text-yellow-800 border-yellow-200"
       case "high":
         return "bg-orange-100 text-orange-800 border-orange-200"
@@ -121,64 +121,55 @@ export function EnhancedCalendarWidget() {
         </CardHeader>
         <CardContent className="overflow-x-auto">
           {/* Week Days Header */}
-          <div>
-            <div className="inline-grid grid-flow-col auto-cols-[minmax(80px,1fr)] sm:grid-cols-7 sm:auto-cols-auto gap-1 sm:gap-2 min-w-max sm:min-w-0">
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-                <div
-                  key={day}
-                  className="text-center text-xs font-medium text-muted-foreground p-1 sm:p-2"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-7 gap-2 min-w-[700px] md:min-w-0">
+            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+              <div
+                key={day}
+                className="text-center text-xs font-medium text-muted-foreground p-1 sm:p-2"
+              >
+                {day}
+              </div>
+            ))}
           </div>
 
           {/* Week Data */}
-          <div>
-            <div className="inline-grid grid-flow-col auto-cols-[minmax(80px,1fr)] sm:grid-cols-7 sm:auto-cols-auto gap-1 sm:gap-2 min-w-max sm:min-w-0">
-              {mockWeekData.map((day, i) => (
-                <div
-                  key={i}
-                  className={`relative mt-2 p-2 sm:p-3 rounded-lg border-2 transition-all hover:shadow-sm cursor-pointer ${
-                    day.isToday ? "border-primary bg-primary/5" : "border-border"
-                  }`}
-                >
-                  <div className="text-center space-y-2">
-                    <div
-                      className={`text-xs sm:text-sm font-medium ${
-                        day.isToday ? "text-primary" : ""
-                      }`}
-                    >
-                      {day.date}
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-xs text-muted-foreground">
-                        {day.sessions}/{day.capacity}
-                      </div>
-                      <Progress
-                        value={getUtilizationPercentage(
-                          day.sessions,
-                          day.capacity
-                        )}
-                        className="h-1"
-                      />
-                      <Badge
-                        variant="outline"
-                        className={`text-xs px-2 py-0.5 ${getStatusColor(
-                          day.status
-                        )}`}
-                      >
-                        {day.status}
-                      </Badge>
-                    </div>
+          <div className="grid grid-cols-7 gap-2 min-w-[700px] md:min-w-0">
+            {mockWeekData.map((day, i) => (
+              <div
+                key={i}
+                className={`relative mt-2 p-2 sm:p-3 rounded-lg border-2 transition-all hover:shadow-sm cursor-pointer ${
+                  day.isToday ? "border-primary bg-primary/5" : "border-border"
+                }`}
+              >
+                <div className="text-center space-y-2">
+                  <div
+                    className={`text-xs sm:text-sm font-medium ${
+                      day.isToday ? "text-primary" : ""
+                    }`}
+                  >
+                    {day.date}
                   </div>
-                  {day.isToday && (
-                    <div className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary animate-pulse" />
-                  )}
+                  <div className="space-y-1">
+                    <div className="text-xs text-muted-foreground">
+                      {day.sessions}/{day.capacity}
+                    </div>
+                    <Progress
+                      value={getUtilizationPercentage(day.sessions, day.capacity)}
+                      className="h-1"
+                    />
+                    <Badge
+                      variant="outline"
+                      className={`text-xs px-2 py-0.5 ${getStatusColor(day.status)}`}
+                    >
+                      {day.status}
+                    </Badge>
+                  </div>
                 </div>
-              ))}
-            </div>
+                {day.isToday && (
+                  <div className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary animate-pulse" />
+                )}
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>

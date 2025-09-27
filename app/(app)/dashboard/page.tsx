@@ -115,7 +115,7 @@ export default function DashboardPage() {
         </div>
       {/* </div> */}
 
-      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 xl:grid-cols-3">
         {/* Notifications Feed */}
         <NotificationsFeed />
 

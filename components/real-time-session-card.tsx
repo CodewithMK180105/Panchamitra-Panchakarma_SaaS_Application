@@ -164,7 +164,7 @@ export function RealTimeSessionCard() {
   return (
     <Card className="lg:col-span-2">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-2 items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
               Real-Time Therapy Tracking
