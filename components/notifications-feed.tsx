@@ -129,7 +129,7 @@ export function NotificationsFeed() {
         </div>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-80">
+        <ScrollArea className="h-[500px]">
           <div className="space-y-4">
             {notifications.map((notification) => (
               <div

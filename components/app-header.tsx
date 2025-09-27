@@ -85,14 +85,14 @@ export function AppHeader() {
           />
         </form>
         <div className="flex items-center gap-2">
-          <Button className="cursor-pointer" variant="outline" size="sm" onClick={handleQuickActions} disabled={loading}>
+          <Button className="cursor-pointer hidden w-40 md:flex items-center" variant="outline" size="sm" onClick={handleQuickActions} disabled={loading}>
             {loading ? <LoadingSpinner className="h-3 w-3 mr-2" /> : <Zap className="h-3 w-3 mr-2" />}
             Quick Actions
           </Button>
-          <Button variant="ghost" size="icon" className="relative cursor-pointer">
+          {/* <Button variant="ghost" size="icon" className="relative cursor-pointer">
             <Palette className="h-4 w-4" />
             <span className="sr-only">Theme picker</span>
-          </Button>
+          </Button> */}
           <ThemeToggle />
           <Button variant="ghost" size="icon" className="relative cursor-pointer" onClick={handleNotifications} disabled={loading}>
             {loading ? <LoadingSpinner className="h-3 w-3" /> : <Bell className="h-4 w-4" />}
@@ -141,6 +141,6 @@ export function AppHeader() {
           </DropdownMenu>
         </div>
       </div>
-    </header>
+    </header> 
   )
 }

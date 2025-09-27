@@ -2,11 +2,23 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Calendar, ChevronLeft, ChevronRight, Plus, Clock } from "lucide-react"
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Clock,
+} from "lucide-react"
 
 interface DayData {
   date: number
@@ -27,14 +39,33 @@ const mockWeekData: DayData[] = [
 ]
 
 const upcomingSessions = [
-  { time: "10:30 AM", patient: "Priya Sharma", therapy: "Abhyanga", room: "Room 3" },
-  { time: "11:00 AM", patient: "Raj Patel", therapy: "Shirodhara", room: "Room 1" },
-  { time: "2:00 PM", patient: "Amit Kumar", therapy: "Basti", room: "Room 2" },
-  { time: "3:30 PM", patient: "Kavya Singh", therapy: "Nasya", room: "Room 4" },
+  {
+    time: "10:30 AM",
+    patient: "Priya Sharma",
+    therapy: "Abhyanga",
+    room: "Room 3",
+  },
+  {
+    time: "11:00 AM",
+    patient: "Raj Patel",
+    therapy: "Shirodhara",
+    room: "Room 1",
+  },
+  {
+    time: "2:00 PM",
+    patient: "Amit Kumar",
+    therapy: "Basti",
+    room: "Room 2",
+  },
+  {
+    time: "3:30 PM",
+    patient: "Kavya Singh",
+    therapy: "Nasya",
+    room: "Room 4",
+  },
 ]
 
 export function EnhancedCalendarWidget() {
-  const [currentWeek, setCurrentWeek] = useState(0)
   const [isAddingSession, setIsAddingSession] = useState(false)
   const router = useRouter()
 
@@ -53,9 +84,8 @@ export function EnhancedCalendarWidget() {
     }
   }
 
-  const getUtilizationPercentage = (sessions: number, capacity: number) => {
-    return (sessions / capacity) * 100
-  }
+  const getUtilizationPercentage = (sessions: number, capacity: number) =>
+    (sessions / capacity) * 100
 
   const handleAddSession = async () => {
     setIsAddingSession(true)
@@ -66,6 +96,7 @@ export function EnhancedCalendarWidget() {
 
   return (
     <div className="space-y-6">
+      {/* Weekly Capacity Card */}
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -74,59 +105,85 @@ export function EnhancedCalendarWidget() {
                 <Calendar className="h-5 w-5" />
                 This Week
               </CardTitle>
-              <CardDescription>Session capacity and utilization</CardDescription>
+              <CardDescription>
+                Session capacity and utilization
+              </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm">
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="sm">
                 <ChevronRight className="h-4 w-4" />
               </Button>
-            </div>
+            </div> */}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
-            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
-              <div key={day} className="text-center text-xs font-medium text-muted-foreground p-1 sm:p-2">
-                <span className="hidden sm:inline">{day}</span>
-                <span className="sm:hidden">{day.slice(0, 1)}</span>
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1 sm:gap-2">
-            {mockWeekData.map((day, i) => (
-              <div
-                key={i}
-                className={`relative p-1 sm:p-3 rounded-lg border-2 transition-all hover:shadow-sm cursor-pointer ${
-                  day.isToday ? "border-primary bg-primary/5" : "border-border"
-                }`}
-              >
-                <div className="text-center space-y-1 sm:space-y-2">
-                  <div className={`text-xs sm:text-sm font-medium ${day.isToday ? "text-primary" : ""}`}>
-                    {day.date}
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-xs text-muted-foreground">
-                      {day.sessions}/{day.capacity}
-                    </div>
-                    <Progress value={getUtilizationPercentage(day.sessions, day.capacity)} className="h-1" />
-                    <Badge variant="outline" className={`text-xs px-1 py-0 ${getStatusColor(day.status)}`}>
-                      <span className="hidden sm:inline">{day.status}</span>
-                      <span className="sm:hidden">{day.status.slice(0, 1).toUpperCase()}</span>
-                    </Badge>
-                  </div>
+        <CardContent className="overflow-x-auto">
+          {/* Week Days Header */}
+          <div>
+            <div className="inline-grid grid-flow-col auto-cols-[minmax(80px,1fr)] sm:grid-cols-7 sm:auto-cols-auto gap-1 sm:gap-2 min-w-max sm:min-w-0">
+              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                <div
+                  key={day}
+                  className="text-center text-xs font-medium text-muted-foreground p-1 sm:p-2"
+                >
+                  {day}
                 </div>
-                {day.isToday && (
-                  <div className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary animate-pulse" />
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Week Data */}
+          <div>
+            <div className="inline-grid grid-flow-col auto-cols-[minmax(80px,1fr)] sm:grid-cols-7 sm:auto-cols-auto gap-1 sm:gap-2 min-w-max sm:min-w-0">
+              {mockWeekData.map((day, i) => (
+                <div
+                  key={i}
+                  className={`relative mt-2 p-2 sm:p-3 rounded-lg border-2 transition-all hover:shadow-sm cursor-pointer ${
+                    day.isToday ? "border-primary bg-primary/5" : "border-border"
+                  }`}
+                >
+                  <div className="text-center space-y-2">
+                    <div
+                      className={`text-xs sm:text-sm font-medium ${
+                        day.isToday ? "text-primary" : ""
+                      }`}
+                    >
+                      {day.date}
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-xs text-muted-foreground">
+                        {day.sessions}/{day.capacity}
+                      </div>
+                      <Progress
+                        value={getUtilizationPercentage(
+                          day.sessions,
+                          day.capacity
+                        )}
+                        className="h-1"
+                      />
+                      <Badge
+                        variant="outline"
+                        className={`text-xs px-2 py-0.5 ${getStatusColor(
+                          day.status
+                        )}`}
+                      >
+                        {day.status}
+                      </Badge>
+                    </div>
+                  </div>
+                  {day.isToday && (
+                    <div className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary animate-pulse" />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
 
+      {/* Today's Schedule */}
       <Card>
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -162,17 +219,26 @@ export function EnhancedCalendarWidget() {
             {upcomingSessions.map((session, i) => (
               <div
                 key={i}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
               >
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                  <div className="text-sm font-medium text-primary">{session.time}</div>
+                  <div className="text-sm font-medium text-primary">
+                    {session.time}
+                  </div>
                   <div className="hidden sm:block h-4 w-px bg-border" />
                   <div>
-                    <div className="text-sm font-medium">{session.patient}</div>
-                    <div className="text-xs text-muted-foreground">{session.therapy}</div>
+                    <div className="text-sm font-medium">
+                      {session.patient}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {session.therapy}
+                    </div>
                   </div>
                 </div>
-                <Badge variant="outline" className="self-start sm:self-center">
+                <Badge
+                  variant="outline"
+                  className="self-start sm:self-center"
+                >
                   {session.room}
                 </Badge>
               </div>
