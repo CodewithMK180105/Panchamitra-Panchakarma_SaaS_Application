@@ -22,7 +22,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Plus, Filter, Phone, Mail, MapPin, Activity, Heart } from "lucide-react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
-const patients = [
+// ✅ Define TypeScript types
+interface Patient {
+  id: number
+  name: string
+  age: number
+  phone: string
+  email: string
+  address: string
+  condition: string
+  treatment: string
+  status: "Active" | "Completed"
+  progress: number
+  lastVisit: string
+  nextAppointment?: string | null
+  avatar?: string
+}
+
+// ✅ Sample Data
+const patients: Patient[] = [
   {
     id: 1,
     name: "Priya Sharma",
@@ -72,10 +90,11 @@ const patients = [
 
 export default function PatientsPage() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedPatient, setSelectedPatient] = useState(null)
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   const [isAddingPatient, setIsAddingPatient] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  // ✅ Filter logic
   const filteredPatients = patients.filter(
     (patient) =>
       patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -84,7 +103,6 @@ export default function PatientsPage() {
 
   const handleAddPatient = async () => {
     setLoading(true)
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setLoading(false)
     setIsAddingPatient(false)
@@ -93,30 +111,31 @@ export default function PatientsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-herbal-green/5 p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
+        {/* ✅ Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
         >
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Patient Management</h1>
-            <p className="text-muted-foreground">Manage and track patient treatments</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Patient Management</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Manage and track patient treatments</p>
           </div>
+
           <Dialog open={isAddingPatient} onOpenChange={setIsAddingPatient}>
             <DialogTrigger asChild>
-              <Button className="bg-herbal-gradient hover:opacity-90 text-white">
+              <Button className="bg-herbal-gradient hover:opacity-90 text-white w-full sm:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Patient
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Add New Patient</DialogTitle>
                 <DialogDescription>Enter patient details to create a new record</DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input id="name" placeholder="Enter full name" />
@@ -126,7 +145,8 @@ export default function PatientsPage() {
                     <Input id="age" type="number" placeholder="Enter age" />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone</Label>
                     <Input id="phone" placeholder="+91 XXXXX XXXXX" />
@@ -136,10 +156,12 @@ export default function PatientsPage() {
                     <Input id="email" type="email" placeholder="email@example.com" />
                   </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
                   <Input id="address" placeholder="Enter address" />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="condition">Primary Condition</Label>
                   <Select>
@@ -154,17 +176,19 @@ export default function PatientsPage() {
                     </SelectContent>
                   </Select>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="notes">Additional Notes</Label>
                   <Textarea id="notes" placeholder="Enter any additional notes" />
                 </div>
               </div>
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsAddingPatient(false)}>
                   Cancel
                 </Button>
                 <Button onClick={handleAddPatient} disabled={loading}>
-                  {loading ? <LoadingSpinner className="h-4 w-4 mr-2" /> : null}
+                  {loading && <LoadingSpinner className="h-4 w-4 mr-2" />}
                   Add Patient
                 </Button>
               </div>
@@ -172,15 +196,15 @@ export default function PatientsPage() {
           </Dialog>
         </motion.div>
 
-        {/* Search and Filters */}
+        {/* ✅ Search + Filters */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex flex-col sm:flex-row gap-4"
+          className="flex flex-col sm:flex-row gap-3"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search patients by name or condition..."
               value={searchTerm}
@@ -188,14 +212,14 @@ export default function PatientsPage() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline">
+          <Button variant="outline" className="w-full sm:w-auto">
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
         </motion.div>
 
-        {/* Patients Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* ✅ Patients Grid - Fully Responsive */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredPatients.map((patient, index) => (
             <motion.div
               key={patient.id}
@@ -248,7 +272,7 @@ export default function PatientsPage() {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <div className="flex flex-col sm:flex-row gap-2 items-center justify-between text-xs sm:text-sm text-muted-foreground">
                     <span>Last Visit: {patient.lastVisit}</span>
                     {patient.nextAppointment && <span>Next: {patient.nextAppointment}</span>}
                   </div>
@@ -258,7 +282,7 @@ export default function PatientsPage() {
           ))}
         </div>
 
-        {/* Patient Details Modal */}
+        {/* ✅ Patient Details Modal */}
         {selectedPatient && (
           <Dialog open={!!selectedPatient} onOpenChange={() => setSelectedPatient(null)}>
             <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
@@ -279,7 +303,7 @@ export default function PatientsPage() {
               </DialogHeader>
 
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="treatment">Treatment</TabsTrigger>
                   <TabsTrigger value="history">History</TabsTrigger>
@@ -287,21 +311,21 @@ export default function PatientsPage() {
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Card>
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Contact Information</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        <div className="flex items-center text-sm">
+                        <div className="flex items-center text-sm break-all">
                           <Phone className="h-4 w-4 mr-2 text-herbal-green" />
                           {selectedPatient.phone}
                         </div>
-                        <div className="flex items-center text-sm">
+                        <div className="flex items-center text-sm break-all">
                           <Mail className="h-4 w-4 mr-2 text-herbal-green" />
                           {selectedPatient.email}
                         </div>
-                        <div className="flex items-center text-sm">
+                        <div className="flex items-center text-sm break-words">
                           <MapPin className="h-4 w-4 mr-2 text-herbal-green" />
                           {selectedPatient.address}
                         </div>
@@ -336,22 +360,20 @@ export default function PatientsPage() {
                     <CardHeader>
                       <CardTitle>Current Treatment Plan</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div>
-                          <h4 className="font-medium">Primary Condition</h4>
-                          <p className="text-sm text-muted-foreground">{selectedPatient.condition}</p>
-                        </div>
-                        <div>
-                          <h4 className="font-medium">Treatment Type</h4>
-                          <p className="text-sm text-muted-foreground">{selectedPatient.treatment}</p>
-                        </div>
-                        <div>
-                          <h4 className="font-medium">Next Appointment</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {selectedPatient.nextAppointment || "No upcoming appointments"}
-                          </p>
-                        </div>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <h4 className="font-medium">Primary Condition</h4>
+                        <p className="text-sm text-muted-foreground">{selectedPatient.condition}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">Treatment Type</h4>
+                        <p className="text-sm text-muted-foreground">{selectedPatient.treatment}</p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium">Next Appointment</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedPatient.nextAppointment || "No upcoming appointments"}
+                        </p>
                       </div>
                     </CardContent>
                   </Card>
@@ -363,13 +385,11 @@ export default function PatientsPage() {
                       <CardTitle>Treatment History</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-3">
-                        <div className="border-l-2 border-herbal-green pl-4">
-                          <h4 className="font-medium">Last Session</h4>
-                          <p className="text-sm text-muted-foreground">Date: {selectedPatient.lastVisit}</p>
-                          <p className="text-sm text-muted-foreground">Treatment: Abhyanga Massage</p>
-                          <p className="text-sm text-muted-foreground">Duration: 90 minutes</p>
-                        </div>
+                      <div className="border-l-2 border-herbal-green pl-4 space-y-1">
+                        <h4 className="font-medium">Last Session</h4>
+                        <p className="text-sm text-muted-foreground">Date: {selectedPatient.lastVisit}</p>
+                        <p className="text-sm text-muted-foreground">Treatment: Abhyanga Massage</p>
+                        <p className="text-sm text-muted-foreground">Duration: 90 minutes</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -386,7 +406,7 @@ export default function PatientsPage() {
                         className="min-h-[200px]"
                         defaultValue="Patient showing good progress with current treatment plan. Stress levels have decreased significantly."
                       />
-                      <Button className="mt-3">Save Notes</Button>
+                      <Button className="mt-3 w-full sm:w-auto">Save Notes</Button>
                     </CardContent>
                   </Card>
                 </TabsContent>

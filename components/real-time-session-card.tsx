@@ -178,113 +178,119 @@ export function RealTimeSessionCard() {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {sessions.map((session) => (
-          <div
-            key={session.id}
-            className="group relative overflow-auto rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/20 custom-scrollbar"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={session.avatar || "/placeholder.svg"} />
-                  <AvatarFallback className="bg-herbal-gradient text-white">
-                    {session.patient
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium">{session.patient}</p>
-                    <Badge variant="outline" className="text-xs">
-                      {session.therapy}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <User className="h-3 w-3" />
-                      {session.therapist}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3" />
-                      {session.room}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {session.startTime}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="text-right">
-                  <Badge variant={getStatusColor(session.status)} className="mb-2">
-                    {getStatusIcon(session.status)}
-                    {session.status}
-                  </Badge>
-                  <div className="space-y-1">
-                    <div className="text-sm font-medium">
-                      {session.elapsed}min / {session.duration}min
-                    </div>
-                    <Progress value={(session.elapsed / session.duration) * 100} className="w-24" />
-                  </div>
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="cursor-pointer">
-                    <Button variant="ghost" size="sm" className="p-2 cursor-pointer">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="cursor-pointer" onClick={() => setDetailsId(session.id)}>
-                      View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setStatusId(session.id)
-                        setNewStatus(session.status)
-                      }}
-                    >
-                      Update Status
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="cursor-pointer"
-                      onClick={() => {
-                        setNotesId(session.id)
-                        setNewNote("")
-                      }}
-                    >
-                      Add Notes
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+  {sessions.map((session) => (
+    <div
+      key={session.id}
+      className="group relative rounded-lg border p-4 transition-all hover:shadow-md hover:border-primary/20 bg-white dark:bg-gray-800"
+    >
+      {/* Top Section */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        {/* Left: Avatar + Patient Info */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 gap-3">
+          <Avatar className="h-12 w-12 shrink-0">
+            <AvatarImage src={session.avatar || "/placeholder.svg"} />
+            <AvatarFallback className="bg-herbal-gradient text-white">
+              {session.patient
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="font-medium text-gray-900 dark:text-gray-100">{session.patient}</p>
+              <Badge variant="outline" className="text-xs">{session.therapy}</Badge>
             </div>
-            <div className="mt-4 pt-4 border-t">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Treatment Checklist</span>
-                <span className="text-xs text-muted-foreground">
-                  {session.checklist.filter((item) => item.completed).length}/{session.checklist.length} completed
-                </span>
+
+            <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <User className="h-3 w-3" />
+                {session.therapist}
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {session.checklist.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs">
-                    <div className={`h-2 w-2 rounded-full ${item.completed ? "bg-green-500" : "bg-gray-300"}`} />
-                    <span className={item.completed ? "text-muted-foreground line-through" : ""}>{item.item}</span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                {session.room}
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {session.startTime}
               </div>
             </div>
           </div>
-        ))}
-      </CardContent>
+        </div>
+
+        {/* Right: Status + Menu */}
+        <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start gap-3">
+          <div className="text-right md:text-right">
+            <Badge variant={getStatusColor(session.status)} className="mb-1">
+              {getStatusIcon(session.status)}
+              {session.status}
+            </Badge>
+            <div className="text-sm font-medium">
+              {session.elapsed}min / {session.duration}min
+            </div>
+            <Progress value={(session.elapsed / session.duration) * 100} className="w-24" />
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="ghost" size="sm" className="p-2 cursor-pointer">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setDetailsId(session.id)}>
+                View Details
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setStatusId(session.id)
+                  setNewStatus(session.status)
+                }}
+              >
+                Update Status
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setNotesId(session.id)
+                  setNewNote("")
+                }}
+              >
+                Add Notes
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Checklist Section */}
+      <div className="mt-4 pt-4 border-t">
+        <div className="flex flex-wrap items-center justify-between mb-2 gap-2">
+          <span className="text-sm font-medium">Treatment Checklist</span>
+          <span className="text-xs text-muted-foreground">
+            {session.checklist.filter((item) => item.completed).length}/{session.checklist.length} completed
+          </span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {session.checklist.map((item, i) => (
+            <div key={i} className="flex items-center gap-2 text-xs">
+              <div className={`h-2 w-2 rounded-full ${item.completed ? "bg-green-500" : "bg-gray-300"}`} />
+              <span className={item.completed ? "text-muted-foreground line-through" : ""}>
+                {item.item}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  ))}
+</CardContent>
+
 
       {/* View Details Modal */}
       <Dialog open={detailsId !== null} onOpenChange={() => setDetailsId(null)}>
-        <DialogContent className="max-w-lg sm:max-w-xl p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+        <DialogContent className="max-w-lg sm:max-w-xl p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg max-h-[90vh] overflow-y-auto mt-4 sm:mt-0">
           {(() => {
             const currentSession = sessions.find((s) => s.id === detailsId)
             if (!currentSession) return null
