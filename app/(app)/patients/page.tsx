@@ -303,7 +303,7 @@ export default function PatientsPage() {
               </DialogHeader>
 
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 sm:mb-0">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="treatment">Treatment</TabsTrigger>
                   <TabsTrigger value="history">History</TabsTrigger>
