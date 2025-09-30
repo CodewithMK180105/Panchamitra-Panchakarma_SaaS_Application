@@ -21,7 +21,34 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Plus, BookOpen, Clock, Users, Star, Download, Copy } from "lucide-react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
-const protocols = [
+// --- Types ---
+
+type Step = {
+  day: number
+  treatment: string
+  duration: string
+}
+
+type Difficulty = "Beginner" | "Intermediate" | "Advanced"
+
+type Protocol = {
+  id: number
+  name: string
+  description: string
+  category: string
+  duration: string
+  sessions: number
+  difficulty: Difficulty
+  rating: number
+  reviews: number
+  steps: Step[]
+  contraindications: string[]
+  materials: string[]
+}
+
+// --- Mock data ---
+
+const protocols: Protocol[] = [
   {
     id: 1,
     name: "Panchakarma Detox Protocol",
@@ -81,49 +108,67 @@ const protocols = [
   },
 ]
 
-export default function ProtocolsPage() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedProtocol, setSelectedProtocol] = useState(null)
-  const [isCreatingProtocol, setIsCreatingProtocol] = useState(false)
-  const [loading, setLoading] = useState(false)
+// --- Component ---
 
-  const categories = ["all", "Detoxification", "Mental Health", "Digestive Health", "Pain Management", "Respiratory"]
+export default function ProtocolsPage(): JSX.Element {
+  const [searchTerm, setSearchTerm] = useState<string>("")
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedProtocol, setSelectedProtocol] = useState<Protocol | null>(null)
+  const [isCreatingProtocol, setIsCreatingProtocol] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const categories = [
+    "all",
+    "Detoxification",
+    "Mental Health",
+    "Digestive Health",
+    "Pain Management",
+    "Respiratory",
+  ]
 
   const filteredProtocols = protocols.filter((protocol) => {
+    const q = searchTerm.trim().toLowerCase()
     const matchesSearch =
-      protocol.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      protocol.description.toLowerCase().includes(searchTerm.toLowerCase())
+      q === "" ||
+      protocol.name.toLowerCase().includes(q) ||
+      protocol.description.toLowerCase().includes(q)
+
     const matchesCategory = selectedCategory === "all" || protocol.category === selectedCategory
     return matchesSearch && matchesCategory
   })
 
-  const handleCreateProtocol = async () => {
+  const handleCreateProtocol = async (): Promise<void> => {
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 800))
     setLoading(false)
     setIsCreatingProtocol(false)
   }
 
-  const handleDownloadProtocol = async (protocol) => {
+  const handleDownloadProtocol = async (protocol: Protocol): Promise<void> => {
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    await new Promise((resolve) => setTimeout(resolve, 600))
     setLoading(false)
-    // Simulate download
+    // TODO: implement real download logic (generate PDF or call backend)
     console.log(`Downloaded protocol: ${protocol.name}`)
   }
 
-  const handleCopyProtocol = async (protocol) => {
+  const handleCopyProtocol = async (protocol: Protocol): Promise<void> => {
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 500))
     setLoading(false)
-    console.log(`Copied protocol: ${protocol.name}`)
+    // Copy to clipboard (example)
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(protocol, null, 2))
+      console.log(`Copied protocol to clipboard: ${protocol.name}`)
+    } catch (err) {
+      console.warn("Clipboard write failed", err)
+    }
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-herbal-green/5 p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,6 +178,7 @@ export default function ProtocolsPage() {
             <h1 className="text-3xl font-bold text-foreground">Treatment Protocols</h1>
             <p className="text-muted-foreground">Standardized treatment plans and procedures</p>
           </div>
+
           <Dialog open={isCreatingProtocol} onOpenChange={setIsCreatingProtocol}>
             <DialogTrigger asChild>
               <Button className="bg-herbal-gradient hover:opacity-90 text-white">
@@ -140,11 +186,13 @@ export default function ProtocolsPage() {
                 Create Protocol
               </Button>
             </DialogTrigger>
+
             <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Create New Protocol</DialogTitle>
                 <DialogDescription>Design a new treatment protocol</DialogDescription>
               </DialogHeader>
+
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -166,11 +214,13 @@ export default function ProtocolsPage() {
                     </Select>
                   </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea id="description" placeholder="Describe the protocol purpose and benefits" />
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="duration">Duration</Label>
                     <Input id="duration" placeholder="e.g., 14 days" />
@@ -193,21 +243,24 @@ export default function ProtocolsPage() {
                     </Select>
                   </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="contraindications">Contraindications</Label>
                   <Textarea id="contraindications" placeholder="List any contraindications or precautions" />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="materials">Required Materials</Label>
                   <Textarea id="materials" placeholder="List required materials and equipment" />
                 </div>
               </div>
+
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setIsCreatingProtocol(false)}>
                   Cancel
                 </Button>
                 <Button onClick={handleCreateProtocol} disabled={loading}>
-                  {loading ? <LoadingSpinner className="h-4 w-4 mr-2" /> : null}
+                  {loading && <LoadingSpinner className="h-4 w-4 mr-2" />}
                   Create Protocol
                 </Button>
               </div>
@@ -215,7 +268,6 @@ export default function ProtocolsPage() {
           </Dialog>
         </motion.div>
 
-        {/* Search and Filters */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -223,7 +275,7 @@ export default function ProtocolsPage() {
           className="flex flex-col sm:flex-row gap-4"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search protocols by name or description..."
               value={searchTerm}
@@ -231,6 +283,7 @@ export default function ProtocolsPage() {
               className="pl-10"
             />
           </div>
+
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Categories" />
@@ -245,14 +298,13 @@ export default function ProtocolsPage() {
           </Select>
         </motion.div>
 
-        {/* Protocols Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredProtocols.map((protocol, index) => (
             <motion.div
               key={protocol.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.06 }}
             >
               <Card
                 className="hover:shadow-lg transition-all duration-300 cursor-pointer h-full"
@@ -267,6 +319,7 @@ export default function ProtocolsPage() {
                     <Badge variant="outline">{protocol.category}</Badge>
                   </div>
                 </CardHeader>
+
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center text-muted-foreground">
@@ -290,8 +343,8 @@ export default function ProtocolsPage() {
                         protocol.difficulty === "Beginner"
                           ? "secondary"
                           : protocol.difficulty === "Intermediate"
-                            ? "default"
-                            : "destructive"
+                          ? "default"
+                          : "destructive"
                       }
                     >
                       {protocol.difficulty}
@@ -305,20 +358,21 @@ export default function ProtocolsPage() {
                       className="flex-1 bg-transparent"
                       onClick={(e) => {
                         e.stopPropagation()
-                        handleDownloadProtocol(protocol)
+                        void handleDownloadProtocol(protocol)
                       }}
                       disabled={loading}
                     >
                       {loading ? <LoadingSpinner className="h-3 w-3 mr-1" /> : <Download className="h-3 w-3 mr-1" />}
                       Download
                     </Button>
+
                     <Button
                       variant="outline"
                       size="sm"
                       className="flex-1 bg-transparent"
                       onClick={(e) => {
                         e.stopPropagation()
-                        handleCopyProtocol(protocol)
+                        void handleCopyProtocol(protocol)
                       }}
                       disabled={loading}
                     >
@@ -332,7 +386,6 @@ export default function ProtocolsPage() {
           ))}
         </div>
 
-        {/* Protocol Details Modal */}
         {selectedProtocol && (
           <Dialog open={!!selectedProtocol} onOpenChange={() => setSelectedProtocol(null)}>
             <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
@@ -345,7 +398,7 @@ export default function ProtocolsPage() {
               </DialogHeader>
 
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="steps">Treatment Steps</TabsTrigger>
                   <TabsTrigger value="materials">Materials</TabsTrigger>
@@ -353,29 +406,29 @@ export default function ProtocolsPage() {
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <Card>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card className="w-full">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Protocol Details</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-sm text-muted-foreground">Duration:</span>
-                          <span className="text-sm font-medium">{selectedProtocol.duration}</span>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Duration:</span>
+                          <span>{selectedProtocol.duration}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-muted-foreground">Sessions:</span>
-                          <span className="text-sm font-medium">{selectedProtocol.sessions}</span>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Sessions:</span>
+                          <span>{selectedProtocol.sessions}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-muted-foreground">Difficulty:</span>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Difficulty:</span>
                           <Badge
                             variant={
                               selectedProtocol.difficulty === "Beginner"
                                 ? "secondary"
                                 : selectedProtocol.difficulty === "Intermediate"
-                                  ? "default"
-                                  : "destructive"
+                                ? "default"
+                                : "destructive"
                             }
                           >
                             {selectedProtocol.difficulty}
@@ -388,7 +441,7 @@ export default function ProtocolsPage() {
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm">Ratings & Reviews</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-2">
+                      <CardContent>
                         <div className="flex items-center space-x-2">
                           <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                           <span className="text-lg font-bold">{selectedProtocol.rating}</span>
@@ -400,30 +453,26 @@ export default function ProtocolsPage() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="steps" className="space-y-4">
-                  <div className="space-y-3">
-                    {selectedProtocol.steps.map((step, index) => (
-                      <Card key={index}>
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-herbal-gradient rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                {step.day}
-                              </div>
-                              <div>
-                                <h4 className="font-medium">{step.treatment}</h4>
-                                <p className="text-sm text-muted-foreground">Day {step.day}</p>
-                              </div>
-                            </div>
-                            <Badge variant="outline">{step.duration}</Badge>
+                <TabsContent value="steps" className="space-y-3">
+                  {selectedProtocol.steps.map((step) => (
+                    <Card key={step.day}>
+                      <CardContent className="p-4 flex justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-herbal-gradient rounded-full flex items-center justify-center text-white font-medium">
+                            {step.day}
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                          <div>
+                            <h4 className="font-medium">{step.treatment}</h4>
+                            <p className="text-sm text-muted-foreground">Day {step.day}</p>
+                          </div>
+                        </div>
+                        <Badge variant="outline">{step.duration}</Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </TabsContent>
 
-                <TabsContent value="materials" className="space-y-4">
+                <TabsContent value="materials" className="space-y-2">
                   <Card>
                     <CardHeader>
                       <CardTitle>Required Materials & Equipment</CardTitle>
@@ -441,7 +490,7 @@ export default function ProtocolsPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="safety" className="space-y-4">
+                <TabsContent value="safety" className="space-y-2">
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-red-600">Contraindications & Precautions</CardTitle>
@@ -455,6 +504,7 @@ export default function ProtocolsPage() {
                           </li>
                         ))}
                       </ul>
+
                       <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                         <p className="text-sm text-yellow-800 dark:text-yellow-200">
                           <strong>Important:</strong> Always conduct a thorough assessment before beginning any
@@ -467,11 +517,12 @@ export default function ProtocolsPage() {
               </Tabs>
 
               <div className="flex justify-end gap-2 pt-4">
-                <Button variant="outline" onClick={() => handleDownloadProtocol(selectedProtocol)} disabled={loading}>
+                <Button variant="outline" onClick={() => void handleDownloadProtocol(selectedProtocol)} disabled={loading}>
                   {loading ? <LoadingSpinner className="h-4 w-4 mr-2" /> : <Download className="h-4 w-4 mr-2" />}
                   Download PDF
                 </Button>
-                <Button onClick={() => handleCopyProtocol(selectedProtocol)} disabled={loading}>
+
+                <Button onClick={() => void handleCopyProtocol(selectedProtocol)} disabled={loading}>
                   {loading ? <LoadingSpinner className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                   Copy Protocol
                 </Button>
