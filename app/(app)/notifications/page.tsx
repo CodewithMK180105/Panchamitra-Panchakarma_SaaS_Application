@@ -162,40 +162,60 @@ export default function NotificationsPage() {
         {filteredNotifications.map((notification, index) => (
           <motion.div
             key={notification.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
+            className="w-full"
           >
             <Card
-              className={`hover:shadow-lg transition-shadow ${!notification.read ? "border-l-4 border-l-herbal-green" : ""}`}
+              className={`group relative transition-all rounded-xl border bg-background hover:shadow-md ${
+                !notification.read ? "border-l-4 border-l-herbal-green bg-muted/20" : ""
+              }`}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-5">
                 <div className="flex items-start gap-4">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-muted`}>
-                    <notification.icon className={`h-5 w-5 ${notification.color}`} />
+                  {/* ICON */}
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-muted transition-colors group-hover:bg-herbal-green/10">
+                    <notification.icon className={`h-6 w-6 ${notification.color}`} />
                   </div>
 
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h3
-                            className={`font-semibold ${!notification.read ? "text-foreground" : "text-muted-foreground"}`}
-                          >
-                            {notification.title}
-                          </h3>
-                          <div className={`h-2 w-2 rounded-full ${getPriorityColor(notification.priority)}`} />
-                          {!notification.read && <div className="h-2 w-2 rounded-full bg-herbal-green" />}
-                        </div>
-                        <p className="text-sm text-muted-foreground">{notification.message}</p>
-                        <p className="text-xs text-muted-foreground">{notification.time}</p>
+                  {/* TEXT CONTENT */}
+                  <div className="flex-1 min-w-0">
+                    {/* Title and Priority */}
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                      <div>
+                        <h3
+                          className={`font-semibold text-base sm:text-lg break-words ${
+                            !notification.read ? "text-foreground" : "text-muted-foreground"
+                          }`}
+                        >
+                          {notification.title}
+                        </h3>
+                        <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line break-words">
+                          {notification.message}
+                        </p>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 sm:ml-4">
+                        <div
+                          className={`h-2.5 w-2.5 rounded-full ${getPriorityColor(
+                            notification.priority
+                          )}`}
+                        />
+                        {!notification.read && <div className="h-2.5 w-2.5 rounded-full bg-herbal-green" />}
+                      </div>
+                    </div>
+
+                    {/* Time + Actions */}
+                    <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <span className="text-xs text-muted-foreground">{notification.time}</span>
+
+                      <div className="flex items-center gap-1 self-end sm:self-auto">
                         {!notification.read && (
                           <Button
                             variant="ghost"
                             size="sm"
+                            className="h-8 w-8 p-0 hover:bg-muted rounded-full"
                             onClick={() => handleMarkAsRead(notification.id)}
                             disabled={isLoading}
                           >
@@ -205,12 +225,17 @@ export default function NotificationsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
+                          className="h-8 w-8 p-0 hover:bg-muted rounded-full"
                           onClick={() => handleDeleteNotification(notification.id)}
                           disabled={isLoading}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 hover:bg-muted rounded-full"
+                        >
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </div>
