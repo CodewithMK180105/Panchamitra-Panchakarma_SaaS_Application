@@ -50,7 +50,7 @@ export function BusinessMetrics({ dateRange, center }: BusinessMetricsProps) {
   return (
     <div className="space-y-6">
       {/* Revenue Overview */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
@@ -111,7 +111,7 @@ export function BusinessMetrics({ dateRange, center }: BusinessMetricsProps) {
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 xl:grid-cols-2">
         {/* Revenue Trends */}
         <Card>
           <CardHeader>
@@ -157,7 +157,7 @@ export function BusinessMetrics({ dateRange, center }: BusinessMetricsProps) {
       </div>
 
       {/* Payment Methods & Operational Metrics */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Payment Methods */}
         <Card>
           <CardHeader>

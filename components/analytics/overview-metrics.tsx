@@ -105,7 +105,7 @@ export function OverviewMetrics({ dateRange, center }: OverviewMetricsProps) {
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 xl:grid-cols-2">
         {/* Patient & Revenue Trends */}
         <Card>
           <CardHeader>

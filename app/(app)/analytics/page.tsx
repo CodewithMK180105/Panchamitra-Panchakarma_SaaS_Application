@@ -19,15 +19,23 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-balance">Analytics & Reports</h1>
-          <p className="text-muted-foreground">Comprehensive insights into your practice performance</p>
+      <div className="flex flex-col gap-4 xl:flex-row lg:items-center lg:justify-between">
+        {/* Left Section - Title & Subtitle */}
+        <div className="text-center xl:text-left space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-balance">
+            Analytics & Reports
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Comprehensive insights into your practice performance
+          </p>
         </div>
-        <div className="flex items-center gap-3">
+
+        {/* Right Section - Filters & Button */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full lg:w-auto">
+          {/* Center Selector */}
           <Select value={selectedCenter} onValueChange={setSelectedCenter}>
-            <SelectTrigger className="w-40">
-              <SelectValue />
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Center" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Centers</SelectItem>
@@ -36,9 +44,11 @@ export default function AnalyticsPage() {
               <SelectItem value="wellness">Wellness Center</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* Date Range Selector */}
           <Select value={dateRange} onValueChange={setDateRange}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Date Range" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="7d">Last 7 days</SelectItem>
@@ -47,7 +57,9 @@ export default function AnalyticsPage() {
               <SelectItem value="1y">Last year</SelectItem>
             </SelectContent>
           </Select>
-          <Button className="bg-herbal-gradient hover:opacity-90">
+
+          {/* Export Button */}
+          <Button className="bg-herbal-gradient hover:opacity-90 w-full md:w-auto">
             <Download className="h-4 w-4 mr-2" />
             Export Report
           </Button>
@@ -56,7 +68,7 @@ export default function AnalyticsPage() {
 
       {/* Main Analytics Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="treatments">Treatments</TabsTrigger>
           <TabsTrigger value="satisfaction">Satisfaction</TabsTrigger>

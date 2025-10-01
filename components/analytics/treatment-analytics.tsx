@@ -70,7 +70,7 @@ export function TreatmentAnalytics({ dateRange, center }: TreatmentAnalyticsProp
   return (
     <div className="space-y-6">
       {/* Treatment Outcomes Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {treatmentOutcomes.map((treatment) => (
           <Card key={treatment.treatment}>
             <CardHeader className="pb-3">
@@ -120,7 +120,7 @@ export function TreatmentAnalytics({ dateRange, center }: TreatmentAnalyticsProp
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
         {/* Monthly Treatment Trends */}
         <Card>
           <CardHeader>
@@ -176,7 +176,7 @@ export function TreatmentAnalytics({ dateRange, center }: TreatmentAnalyticsProp
           <CardDescription>Key factors contributing to successful outcomes</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="p-4 bg-herbal-green/10 rounded-lg border border-herbal-green/20">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="h-4 w-4 text-herbal-green" />

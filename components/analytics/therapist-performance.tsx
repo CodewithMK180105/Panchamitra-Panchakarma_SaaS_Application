@@ -82,7 +82,7 @@ export function TherapistPerformance({ dateRange, center }: TherapistPerformance
   return (
     <div className="space-y-6">
       {/* Performance Overview */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {performanceMetrics.map((metric) => (
           <Card key={metric.metric}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -111,7 +111,7 @@ export function TherapistPerformance({ dateRange, center }: TherapistPerformance
       </div>
 
       {/* Therapist Performance Cards */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
         {therapistData.map((therapist) => (
           <Card key={therapist.id}>
             <CardHeader>
@@ -182,7 +182,7 @@ export function TherapistPerformance({ dateRange, center }: TherapistPerformance
       </div>
 
       {/* Monthly Performance Chart */}
-      <Card>
+      <Card className="overflow-auto">
         <CardHeader>
           <CardTitle>Monthly Session Volume by Therapist</CardTitle>
           <CardDescription>Sessions completed per therapist over time</CardDescription>
@@ -210,7 +210,7 @@ export function TherapistPerformance({ dateRange, center }: TherapistPerformance
           <CardDescription>Key observations and recommendations</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="p-4 bg-herbal-green/10 rounded-lg border border-herbal-green/20">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="h-4 w-4 text-herbal-green" />

@@ -197,7 +197,7 @@ export function DetailedReports({ dateRange, center }: DetailedReportsProps) {
           </div>
 
           {/* Reports Grid */}
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             {filteredReports.map((report) => (
               <Card key={report.id} className="cursor-pointer hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
