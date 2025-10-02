@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Download } from "lucide-react"
 import { OverviewMetrics } from "@/components/analytics/overview-metrics"
@@ -11,6 +11,7 @@ import { PatientSatisfaction } from "@/components/analytics/patient-satisfaction
 import { BusinessMetrics } from "@/components/analytics/business-metrics"
 import { TherapistPerformance } from "@/components/analytics/therapist-performance"
 import { DetailedReports } from "@/components/analytics/detailed-reports"
+import { TabsList2 } from "@/components/ui/tabs2"
 
 export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState("30d")
@@ -68,14 +69,14 @@ export default function AnalyticsPage() {
 
       {/* Main Analytics Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
+        <TabsList2 className="grid w-full grid-cols-3 lg:grid-cols-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="treatments">Treatments</TabsTrigger>
           <TabsTrigger value="satisfaction">Satisfaction</TabsTrigger>
           <TabsTrigger value="business">Business</TabsTrigger>
           <TabsTrigger value="therapists">Therapists</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
-        </TabsList>
+        </TabsList2>
 
         <TabsContent value="overview">
           <OverviewMetrics dateRange={dateRange} center={selectedCenter} />
