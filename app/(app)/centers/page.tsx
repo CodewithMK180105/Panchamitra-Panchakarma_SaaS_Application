@@ -6,12 +6,48 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { MapPin, Phone, Mail, Clock, Users, Star, Plus, Search, Filter, MoreVertical, Edit, Trash2 } from "lucide-react"
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Users,
+  Star,
+  Plus,
+  Search,
+  Filter,
+  MoreVertical,
+  Edit,
+  Trash2,
+  Eye,
+} from "lucide-react"
 import { motion } from "framer-motion"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
 
 export default function CentersPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCenter, setSelectedCenter] = useState<any>(null)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const centers = [
     {
@@ -45,10 +81,10 @@ export default function CentersPage() {
     {
       id: 3,
       name: "Traditional Ayurveda Clinic",
-      location: "Kerala, India",
-      address: "789 Heritage Road, Kochi, Kerala - 682001",
-      phone: "+91 76543 21098",
       email: "info@traditionalayurveda.com",
+      phone: "+91 76543 21098",
+      address: "789 Heritage Road, Kochi, Kerala - 682001",
+      location: "Kerala, India",
       rating: 4.9,
       totalPatients: 2100,
       activeTherapists: 12,
@@ -62,8 +98,22 @@ export default function CentersPage() {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
-      // Simulate adding center
     }, 2000)
+  }
+
+  const handleEdit = (center: any) => {
+    setSelectedCenter(center)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleDelete = (center: any) => {
+    setSelectedCenter(center)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = () => {
+    console.log("Deleted center:", selectedCenter)
+    setIsDeleteDialogOpen(false)
   }
 
   const filteredCenters = centers.filter(
@@ -135,14 +185,9 @@ export default function CentersPage() {
                       {center.location}
                     </CardDescription>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant={center.status === "Active" ? "default" : "secondary"}>{center.status}</Badge>
-                    <Button variant="ghost" size="sm">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                  </div>
                 </div>
               </CardHeader>
+
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2">
@@ -186,11 +231,21 @@ export default function CentersPage() {
                 </div>
 
                 <div className="flex gap-2 pt-2">
-                  <Button variant="outline" size="sm" className="flex-1 bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 cursor-pointer"
+                    onClick={() => handleEdit(center)}
+                  >
                     <Edit className="mr-2 h-3 w-3" />
                     Edit
                   </Button>
-                  <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700 bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700 cursor-pointer"
+                    onClick={() => handleDelete(center)}
+                  >
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
@@ -199,6 +254,126 @@ export default function CentersPage() {
           </motion.div>
         ))}
       </div>
+
+      {/* ✏️ Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Edit Center</DialogTitle>
+            <DialogDescription>
+              Update the details of the treatment center. Make sure all fields are accurate.
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedCenter && (
+            <div className="space-y-4 py-2 max-h-[70vh] overflow-y-auto pr-1 custom-scrollbar">
+              {/* Name */}
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" className="mt-1" defaultValue={selectedCenter.name} />
+              </div>
+
+              {/* Email */}
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  className="mt-1"
+                  type="email"
+                  placeholder="example@center.com"
+                  defaultValue={selectedCenter.email}
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <Label htmlFor="phone">Phone</Label>
+                <Input id="phone" className="mt-1" defaultValue={selectedCenter.phone} />
+              </div>
+
+              {/* Address */}
+              <div>
+                <Label htmlFor="email">Address</Label>
+                <Input
+                  id="address"
+                  className="mt-1"
+                  type="text"
+                  placeholder={selectedCenter.address}
+                  defaultValue={selectedCenter.address}
+                />
+              </div>
+
+              {/* Location */}
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Input id="location" className="mt-1" defaultValue={selectedCenter.location} />
+              </div>        
+
+              {/* Specialization / Services */}
+              <div>
+                <Label htmlFor="services">Specialization / Services</Label>
+                <Input
+                  id="services"
+                  className="mt-1"
+                  placeholder="e.g. Physiotherapy, Dental, Ayurveda"
+                  defaultValue={selectedCenter.services}
+                />
+              </div>
+
+              {/* Operating Hours */}
+              <div>
+                <Label htmlFor="hours">Operating Hours</Label>
+                <Input
+                  className="mt-1"
+                  id="hours"
+                  placeholder="e.g. Mon–Sat: 9 AM – 7 PM"
+                  defaultValue={selectedCenter.operatingHours}
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <textarea
+                  id="description"
+                  className="mt-1 w-full rounded-md border p-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                  rows={4}
+                  placeholder="Short description about the center..."
+                  defaultValue={selectedCenter.description}
+                />
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-herbal-gradient text-white">Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 🗑 Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Center</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete <strong>{selectedCenter?.name}</strong>? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Yes, Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {filteredCenters.length === 0 && (
         <div className="text-center py-12">
