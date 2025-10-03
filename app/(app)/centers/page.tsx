@@ -47,7 +47,7 @@ export default function CentersPage() {
   const [selectedCenter, setSelectedCenter] = useState<any>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAddCenterDialogOpen, setIsAddCenterDialogOpen] = useState(false);
 
   const centers = [
     {
@@ -94,13 +94,10 @@ export default function CentersPage() {
     },
   ]
 
-  const handleAddCenter = () => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+  const handleAddCenter = (center: any) => {
+    setIsAddCenterDialogOpen(true)
   }
-
+  
   const handleEdit = (center: any) => {
     setSelectedCenter(center)
     setIsEditDialogOpen(true)
@@ -133,9 +130,10 @@ export default function CentersPage() {
         <Button
           onClick={handleAddCenter}
           disabled={isLoading}
-          className="bg-herbal-gradient hover:opacity-90 text-white"
+          className="cursor-pointer bg-herbal-gradient hover:opacity-90 text-white"
+
         >
-          {isLoading ? (
+          {/* {isLoading ? (
             <>
               <LoadingSpinner size="sm" className="mr-2" />
               Adding...
@@ -145,7 +143,9 @@ export default function CentersPage() {
               <Plus className="mr-2 h-4 w-4" />
               Add Center
             </>
-          )}
+          )} */}
+          <Plus className="mr-2 h-4 w-4" />
+          Add Center
         </Button>
       </div>
 
@@ -160,7 +160,7 @@ export default function CentersPage() {
             className="pl-10"
           />
         </div>
-        <Button variant="outline">
+        <Button variant="outline" className="cursor-pointer">
           <Filter className="mr-2 h-4 w-4" />
           Filters
         </Button>
@@ -255,9 +255,100 @@ export default function CentersPage() {
         ))}
       </div>
 
+      {/* ✏️ Add Center Dialog */}
+      <Dialog open={isAddCenterDialogOpen} onOpenChange={setIsAddCenterDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle>Add Center</DialogTitle>
+            <DialogDescription>
+              Add the details of the treatment center. Make sure all fields are accurate.
+            </DialogDescription>
+          </DialogHeader>
+            <div className="space-y-4 py-2 max-h-[50vh] overflow-y-auto pr-1 custom-scrollbar">
+              {/* Name */}
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" className="mt-1" />
+              </div>
+
+              {/* Email */}
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  className="mt-1"
+                  type="email"
+                  placeholder="example@center.com"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <Label htmlFor="phone">Phone</Label>
+                <Input id="phone" className="mt-1" />
+              </div>
+
+              {/* Address */}
+              <div>
+                <Label htmlFor="email">Address</Label>
+                <Input
+                  id="address"
+                  className="mt-1"
+                  type="text"
+                  placeholder="eg: 107, Hiranand Building, Gokhale Road."
+                />
+              </div>
+
+              {/* Location */}
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Input id="location" className="mt-1" placeholder="Mumbai, Maharashtra" />
+              </div>
+
+              {/* Specialization / Services */}
+              <div>
+                <Label htmlFor="services">Specialization / Services</Label>
+                <Input
+                  id="services"
+                  className="mt-1"
+                  placeholder="e.g. Physiotherapy, Dental, Ayurveda"
+                />
+              </div>
+
+              {/* Operating Hours */}
+              <div>
+                <Label htmlFor="hours">Operating Hours</Label>
+                <Input
+                  className="mt-1"
+                  id="hours"
+                  placeholder="e.g. Mon–Sat: 9 AM – 7 PM"
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <textarea
+                  id="description"
+                  className="mt-1 w-full rounded-md border p-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                  rows={4}
+                  placeholder="Short description about the center..."
+                />
+              </div>
+            </div>
+
+          <DialogFooter>
+            <Button className="cursor-pointer" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="cursor-pointer bg-herbal-gradient text-white">Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
       {/* ✏️ Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Edit Center</DialogTitle>
             <DialogDescription>
@@ -266,7 +357,7 @@ export default function CentersPage() {
           </DialogHeader>
 
           {selectedCenter && (
-            <div className="space-y-4 py-2 max-h-[70vh] overflow-y-auto pr-1 custom-scrollbar">
+            <div className="space-y-4 py-2 max-h-[50vh] overflow-y-auto pr-1 custom-scrollbar">
               {/* Name */}
               <div>
                 <Label htmlFor="name">Name</Label>
@@ -346,10 +437,10 @@ export default function CentersPage() {
           )}
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button className="cursor-pointer" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancel
             </Button>
-            <Button className="bg-herbal-gradient text-white">Save Changes</Button>
+            <Button className="cursor-pointer bg-herbal-gradient text-white">Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
