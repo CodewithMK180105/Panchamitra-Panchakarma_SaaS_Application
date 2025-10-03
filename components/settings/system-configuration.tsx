@@ -356,7 +356,7 @@ export function SystemConfiguration() {
               <Label htmlFor="apiKey">API Key</Label>
               <div className="flex gap-2">
                 <Input id="apiKey" type="password" value="••••••••••••••••••••••••••••••••" readOnly />
-                <Button variant="outline">Regenerate</Button>
+                <Button variant="outline" className="cursor-pointer">Regenerate</Button>
               </div>
             </div>
             <div className="space-y-2">
@@ -384,7 +384,7 @@ export function SystemConfiguration() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90">
+        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
           Save Configuration
         </Button>
       </div>

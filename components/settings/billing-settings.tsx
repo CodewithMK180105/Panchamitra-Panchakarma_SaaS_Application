@@ -96,7 +96,7 @@ export function BillingSettings() {
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             <div className="space-y-2">
               <Label>Payment Method</Label>
               <div className="flex items-center gap-3 p-3 border rounded-lg">
@@ -107,7 +107,7 @@ export function BillingSettings() {
                   <div className="font-medium">•••• •••• •••• {paymentMethod.last4}</div>
                   <div className="text-sm text-muted-foreground">Expires {paymentMethod.expiry}</div>
                 </div>
-                <Button size="sm" variant="outline" className="ml-auto bg-transparent">
+                <Button size="sm" variant="outline" className="ml-auto bg-transparent cursor-pointer">
                   Update
                 </Button>
               </div>
@@ -189,7 +189,7 @@ export function BillingSettings() {
           <CardDescription>Upgrade or downgrade your subscription</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {plans.map((plan) => (
               <Card key={plan.id} className={`relative ${plan.current ? "ring-2 ring-herbal-green" : ""}`}>
                 {plan.current && (
@@ -211,7 +211,7 @@ export function BillingSettings() {
                   </ul>
                   <Button
                     variant={plan.current ? "outline" : "default"}
-                    className={`w-full ${!plan.current ? "bg-herbal-gradient hover:opacity-90" : ""}`}
+                    className={`w-full ${!plan.current ? "bg-herbal-gradient hover:opacity-90 cursor-pointer" : ""}`}
                     disabled={plan.current}
                   >
                     {plan.current ? "Current Plan" : plan.price > subscription.amount ? "Upgrade" : "Downgrade"}
@@ -249,7 +249,7 @@ export function BillingSettings() {
                       {invoice.status}
                     </Badge>
                   </div>
-                  <Button size="sm" variant="ghost">
+                  <Button className="cursor-pointer" size="sm" variant="ghost">
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>

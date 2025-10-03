@@ -122,7 +122,7 @@ export function UserManagement() {
         </div>
         <Dialog open={showAddUser} onOpenChange={setShowAddUser}>
           <DialogTrigger asChild>
-            <Button className="bg-herbal-gradient hover:opacity-90">
+            <Button className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
               <Plus className="h-4 w-4 mr-2" />
               Add User
             </Button>
@@ -177,10 +177,10 @@ export function UserManagement() {
                 </Select>
               </div>
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setShowAddUser(false)}>
+                <Button className="cursor-pointer" variant="outline" onClick={() => setShowAddUser(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleAddUser} className="bg-herbal-gradient hover:opacity-90">
+                <Button onClick={handleAddUser} className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
                   Add User
                 </Button>
               </div>
@@ -199,11 +199,78 @@ export function UserManagement() {
           <CardDescription>Manage your clinic staff and their access levels</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-4 grid sm:grid-cols-2 gap-2 lg:flex flex-col">
             {users.map((user) => (
-              <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12">
+              <div
+                key={user.id}
+                className="p-4 border rounded-lg flex flex-col gap-4 lg:grid lg:grid-cols-3 lg:items-center lg:gap-6"
+              >
+                {/* 👇 Mobile layout (<lg) */}
+                <div className="flex flex-col items-center text-center gap-3 lg:hidden">
+                  {/* Avatar */}
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                    <AvatarFallback>
+                      {user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  {/* Name */}
+                  <h4 className="font-semibold text-lg truncate">{user.name}</h4>
+
+                  {/* Contact info */}
+                  <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Mail className="h-3 w-3" />
+                      <span className="break-all">{user.email}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Phone className="h-3 w-3" />
+                      <span>{user.phone}</span>
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <Badge className={roles.find((r) => r.value === user.role)?.color}>
+                      {roles.find((r) => r.value === user.role)?.label}
+                    </Badge>
+                    <Badge variant={user.status === "active" ? "default" : "secondary"}>
+                      {user.status}
+                    </Badge>
+                  </div>
+
+                  {/* Last login */}
+                  <span className="text-xs text-muted-foreground">
+                    Last login: {user.lastLogin}
+                  </span>
+
+                  {/* Actions */}
+                  <div className="flex items-center justify-center gap-3 pt-2">
+                    <Switch
+                      checked={user.status === "active"}
+                      onCheckedChange={() => toggleUserStatus(user.id)}
+                    />
+                    <Button size="icon" variant="ghost" className="rounded-full">
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="rounded-full text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* 👇 lg and above — Grid Layout */}
+                {/* 1️⃣ Column 1 — Avatar + Name */}
+                <div className="hidden lg:flex items-center gap-4">
+                  <Avatar className="h-12 w-12 shrink-0">
                     <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
                     <AvatarFallback>
                       {user.name
@@ -214,31 +281,51 @@ export function UserManagement() {
                   </Avatar>
                   <div>
                     <h4 className="font-medium">{user.name}</h4>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Mail className="h-3 w-3" />
-                      {user.email}
-                      <Phone className="h-3 w-3 ml-2" />
-                      {user.phone}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge className={roles.find((r) => r.value === user.role)?.color}>
-                        {roles.find((r) => r.value === user.role)?.label}
-                      </Badge>
-                      <Badge variant={user.status === "active" ? "default" : "secondary"}>{user.status}</Badge>
-                      <span className="text-xs text-muted-foreground">Last login: {user.lastLogin}</span>
-                    </div>
+                    <span className="text-xs text-muted-foreground block">
+                      Last login: {user.lastLogin}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Switch checked={user.status === "active"} onCheckedChange={() => toggleUserStatus(user.id)} />
+
+                {/* 2️⃣ Column 2 — Contact + Role */}
+                <div className="hidden lg:flex flex-col gap-1 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Mail className="h-3 w-3" />
+                    <span className="break-all">{user.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-3 w-3" />
+                    <span>{user.phone}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 flex-wrap">
+                    <Badge className={roles.find((r) => r.value === user.role)?.color}>
+                      {roles.find((r) => r.value === user.role)?.label}
+                    </Badge>
+                    <Badge variant={user.status === "active" ? "default" : "secondary"}>
+                      {user.status}
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* 3️⃣ Column 3 — Actions */}
+                <div className="hidden lg:flex items-center justify-end gap-2">
+                  <Switch
+                    checked={user.status === "active"}
+                    onCheckedChange={() => toggleUserStatus(user.id)}
+                  />
                   <Button size="sm" variant="ghost">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-red-600 hover:text-red-700"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
+
             ))}
           </div>
         </CardContent>
@@ -260,7 +347,7 @@ export function UserManagement() {
                 <h4 className="font-medium flex items-center gap-2">
                   <Badge className={role.color}>{role.label}</Badge>
                 </h4>
-                <div className="grid gap-3 md:grid-cols-2 pl-4">
+                <div className="grid gap-3 lg:grid-cols-2 pl-4">
                   {permissions.map((permission) => (
                     <div key={permission.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                       <div>

@@ -399,7 +399,7 @@ export function SecuritySettings() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90">
+        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
           Save Security Settings
         </Button>
       </div>

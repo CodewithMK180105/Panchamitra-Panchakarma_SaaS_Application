@@ -9,6 +9,7 @@ import { BillingSettings } from "@/components/settings/billing-settings"
 import { SecuritySettings } from "@/components/settings/security-settings"
 import { DataManagement } from "@/components/settings/data-management"
 import { Settings, Users, Cog, CreditCard, Shield, Database } from "lucide-react"
+import { TabsList2 } from "@/components/ui/tabs2"
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("general")
@@ -23,7 +24,7 @@ export default function SettingsPage() {
 
       {/* Settings Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList2 className="grid w-full grid-cols-3 lg:grid-cols-6">
           <TabsTrigger value="general" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
             General
@@ -48,7 +49,7 @@ export default function SettingsPage() {
             <Database className="h-4 w-4" />
             Data
           </TabsTrigger>
-        </TabsList>
+        </TabsList2>
 
         <TabsContent value="general">
           <GeneralSettings />

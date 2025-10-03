@@ -206,12 +206,12 @@ export function DataManagement() {
             </div>
           )}
 
-          <div className="flex gap-3">
-            <Button onClick={handleManualBackup} className="bg-herbal-gradient hover:opacity-90">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button onClick={handleManualBackup} className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
               <Database className="h-4 w-4 mr-2" />
               Create Manual Backup
             </Button>
-            <Button variant="outline" onClick={handleExportData}>
+            <Button className="cursor-pointer" variant="outline" onClick={handleExportData}>
               <Download className="h-4 w-4 mr-2" />
               Export Data
             </Button>
@@ -228,7 +228,7 @@ export function DataManagement() {
         <CardContent>
           <div className="space-y-3">
             {backupHistory.map((backup) => (
-              <div key={backup.id} className="flex items-center justify-between p-3 border rounded-lg">
+              <div key={backup.id} className="flex flex-col md:flex-row items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-2 h-2 rounded-full ${
@@ -254,12 +254,12 @@ export function DataManagement() {
                     {backup.status}
                   </Badge>
                   {backup.status === "completed" && (
-                    <Button size="sm" variant="ghost" onClick={() => handleRestore(backup.id)}>
+                    <Button className="cursor-pointer" size="sm" variant="ghost" onClick={() => handleRestore(backup.id)}>
                       <Upload className="h-3 w-3 mr-1" />
                       Restore
                     </Button>
                   )}
-                  <Button size="sm" variant="ghost">
+                  <Button className="cursor-pointer" size="sm" variant="ghost">
                     <Download className="h-3 w-3" />
                   </Button>
                 </div>
@@ -345,10 +345,10 @@ export function DataManagement() {
               <h4 className="font-medium mb-2">GDPR Compliance</h4>
               <p className="text-sm text-muted-foreground mb-3">Tools for managing data subject rights and consent</p>
               <div className="space-y-2">
-                <Button size="sm" variant="outline" className="w-full bg-transparent">
+                <Button size="sm" variant="outline" className="w-full bg-transparent cursor-pointer">
                   Export Patient Data
                 </Button>
-                <Button size="sm" variant="outline" className="w-full bg-transparent">
+                <Button size="sm" variant="outline" className="w-full bg-transparent cursor-pointer">
                   Delete Patient Data
                 </Button>
               </div>
@@ -359,10 +359,10 @@ export function DataManagement() {
                 Remove personally identifiable information from old records
               </p>
               <div className="space-y-2">
-                <Button size="sm" variant="outline" className="w-full bg-transparent">
+                <Button size="sm" variant="outline" className="w-full bg-transparent cursor-pointer">
                   Anonymize Old Records
                 </Button>
-                <Button size="sm" variant="outline" className="w-full bg-transparent">
+                <Button size="sm" variant="outline" className="w-full bg-transparent cursor-pointer">
                   View Anonymization Log
                 </Button>
               </div>
@@ -381,7 +381,7 @@ export function DataManagement() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90">
+        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
           Save Data Management Settings
         </Button>
       </div>

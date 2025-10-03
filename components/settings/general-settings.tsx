@@ -137,7 +137,7 @@ export function GeneralSettings() {
           <CardDescription>Timezone, language, and currency preferences</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="timezone">Timezone</Label>
               <Select
@@ -286,7 +286,7 @@ export function GeneralSettings() {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90">
+        <Button onClick={handleSave} className="bg-herbal-gradient hover:opacity-90 cursor-pointer">
           Save Changes
         </Button>
       </div>
