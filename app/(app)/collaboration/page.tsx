@@ -182,10 +182,10 @@ export default function CollaborationPage() {
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setIsCreatingCollaboration(false)}>
+                <Button className="cursor-pointer" variant="outline" onClick={() => setIsCreatingCollaboration(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleCreateCollaboration} disabled={loading}>
+                <Button className="cursor-pointer" onClick={handleCreateCollaboration} disabled={loading}>
                   {loading && <LoadingSpinner className="h-4 w-4 mr-2" />}
                   Create Collaboration
                 </Button>
