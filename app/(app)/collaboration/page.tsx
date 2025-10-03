@@ -143,7 +143,7 @@ export default function CollaborationPage() {
           </div>
           <Dialog open={isCreatingCollaboration} onOpenChange={setIsCreatingCollaboration}>
             <DialogTrigger asChild>
-              <Button className="bg-herbal-gradient hover:opacity-90 text-white">
+              <Button className="bg-herbal-gradient hover:opacity-90 text-white cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
                 New Collaboration
               </Button>
